@@ -12,6 +12,8 @@ public class BallController : MonoBehaviour
     public Slider powerSlider;
     public TextMeshProUGUI puttCountLabel;
     public float minHoleTime;
+    public Transform startBall;
+    public LevelManager levelManager;
 
     private LineRenderer line;
     private Rigidbody ball;
@@ -27,6 +29,7 @@ public class BallController : MonoBehaviour
         ball = GetComponent<Rigidbody>();
         ball.maxAngularVelocity = 1000;
         line = GetComponent<LineRenderer>();
+        startBall.GetComponent<MeshRenderer>().enabled = false;
     }
 
     private void Update()
@@ -102,8 +105,7 @@ public class BallController : MonoBehaviour
         holeTime += Time.deltaTime;
         if(holeTime >= minHoleTime)
         {
-            //player telah menyelesaikan, pindah ke  player selanjutnya
-            Debug.Log("in Hole " + putts + " putts to get it in ");
+            levelManager.NextPlayer(putts);
             holeTime = 0;
         }
     }
@@ -130,6 +132,19 @@ public class BallController : MonoBehaviour
             ball.velocity = Vector3.zero;
             ball.angularVelocity = Vector3.zero;
         }
+    }
+
+    public void SetupBall(Color color)
+    {
+        transform.position = startBall.position;
+        angle = startBall.rotation.eulerAngles.y;
+        ball.velocity = Vector3.zero;
+        ball.angularVelocity = Vector3.zero;
+        GetComponent<MeshRenderer>().material.SetColor("_Color", color);
+        line.material.SetColor("_Color", color);
+        line.enabled = true;
+        putts = 0;
+        puttCountLabel.text = "0";
     }
 
 }
