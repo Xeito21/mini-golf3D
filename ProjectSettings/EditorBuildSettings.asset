@@ -7,8 +7,20 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/Menu.unity
-    guid: d3479db1ad0a67d49abeaabb6fce54f9
+    guid: a018726888299d449b423f8ec1ccb602
+  - enabled: 1
+    path: Assets/Scenes/LevelSelect.unity
+    guid: e299e542c2fad5f4babae04feb8e057d
   - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Level 2.unity
+    guid: b25db7efcb5b72442824e474cea455e5
+  - enabled: 1
+    path: Assets/Scenes/Level 3.unity
+    guid: 71cc943ec87ab3e459458ad8dfdfd9df
+  - enabled: 1
+    path: Assets/Scenes/ScoreBoard.unity
+    guid: 0e8fa4fee54854c48b7b0a233488ab35
   m_configObjects: {}

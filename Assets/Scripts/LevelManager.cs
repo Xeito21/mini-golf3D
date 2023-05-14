@@ -9,12 +9,14 @@ public class LevelManager : MonoBehaviour
 {
     public BallController ball;
     public TextMeshProUGUI labelPlayerName;
+    public int nextSceneLoad;
 
     private PlayerRecord playerRecord;
     private int playerIndex;
     void Start()
     {
         playerRecord = GameObject.Find("PlayerRecord").GetComponent<PlayerRecord>();
+        nextSceneLoad = SceneManager.GetActiveScene().buildIndex + 1;
         playerIndex = 0;
         SetupPlayer();
     }
@@ -37,12 +39,17 @@ public class LevelManager : MonoBehaviour
         {
             if(playerRecord.levelIndex == playerRecord.levels.Length - 1)
             {
-                Debug.Log("Scoreboard");
+                SceneManager.LoadScene("ScoreBoard");
             }
             else
             {
                 playerRecord.levelIndex++;
-                SceneManager.LoadScene(playerRecord.levels[playerRecord.levelIndex]);
+                //SceneManager.LoadScene(playerRecord.levels[playerRecord.levelIndex]);
+                SceneManager.LoadScene(nextSceneLoad);
+                if(nextSceneLoad > PlayerPrefs.GetInt("ArenaAt"))
+                {
+                    PlayerPrefs.SetInt("ArenaAt", nextSceneLoad);
+                }
             }
         }
     }

@@ -12,12 +12,30 @@ public class MenuManager : MonoBehaviour
     public PlayerRecord playerRecord;
     public Button startBtn;
     public Button addPlayerBtn;
+    public void Start()
+    {
+        // check if PlayerName exists in PlayerPrefs
+        if (PlayerPrefs.HasKey("PlayerName"))
+        {
+            startBtn.interactable = true;
+        }
+        else
+        {
+            startBtn.interactable = false;
+        }
+    }
+
     public void AddPlayerBtn()
     {
-        playerRecord.AddPlayer(InputPlayerName.text);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
+        if (!PlayerPrefs.HasKey("PlayerName"))
+        {
+            playerRecord.AddPlayer(InputPlayerName.text);
+            PlayerPrefs.SetString("PlayerName", InputPlayerName.text);
+        }
         startBtn.interactable = true;
         InputPlayerName.text = "";
-        if(playerRecord.playerList.Count == playerRecord.playerColours.Length)
+        if (playerRecord.playerList.Count == playerRecord.playerColours.Length)
         {
             addPlayerBtn.interactable = false;
         }
@@ -25,6 +43,15 @@ public class MenuManager : MonoBehaviour
 
     public void StartBtn()
     {
-        SceneManager.LoadScene(playerRecord.levels[0]);
+        FindObjectOfType<AudioManager>().PlaySound("Click");
+        SceneManager.LoadScene(1);
     }
+
+    public void QuitBtn()
+    {
+        Application.Quit();
+    }
+
+
+
 }

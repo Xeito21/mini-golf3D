@@ -6,14 +6,16 @@ using TMPro;
 
 public class BallController : MonoBehaviour
 {
+    public float shiftMultiplier = 3f; // faktor pengganda kecepatan perubahan sudut bola saat menekan L-Shift
     public float maxPower;
-    public float changeAngleSpeed;
+    public float changeAngleSpeed = 10f;
     public float lineLength;
     public Slider powerSlider;
     public TextMeshProUGUI puttCountLabel;
     public float minHoleTime;
     public Transform startBall;
     public LevelManager levelManager;
+
 
     private LineRenderer line;
     private Rigidbody ball;
@@ -35,7 +37,7 @@ public class BallController : MonoBehaviour
     private void Update()
     {
         //Debug.Log(ball.velocity.magnitude);
-        if(ball.velocity.magnitude < 0.01f)
+        if (ball.velocity.magnitude < 0.01f)
         {
             if (Input.GetKey(KeyCode.A))
             {
@@ -62,9 +64,17 @@ public class BallController : MonoBehaviour
 
     }
 
+
     private void ChangeAngle(int direction)
     {
-        angle += changeAngleSpeed * Time.deltaTime * direction;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            angle += changeAngleSpeed * shiftMultiplier * Time.deltaTime * direction;
+        }
+        else
+        {
+            angle += changeAngleSpeed * Time.deltaTime * direction;
+        }
     }
 
     private void UpdateLinePositions()
@@ -76,6 +86,7 @@ public class BallController : MonoBehaviour
 
     private void Putt()
     {
+        FindObjectOfType<AudioManager>().PlaySound("Hit");
         lastPosition = transform.position;
         ball.AddForce(Quaternion.Euler(0, angle, 0) * Vector3.forward * maxPower * power, ForceMode.Impulse);
         power = 0;
@@ -97,6 +108,14 @@ public class BallController : MonoBehaviour
         if(other.tag == "Hole")
         {
             CountHoleTime();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Hole")
+        {
+            FindObjectOfType<AudioManager>().PlaySound("Putt");
         }
     }
 
@@ -128,6 +147,7 @@ public class BallController : MonoBehaviour
     {
         if(collision.collider.tag == "Out")
         {
+            FindObjectOfType<AudioManager>().PlaySound("Out");
             transform.position = lastPosition;
             ball.velocity = Vector3.zero;
             ball.angularVelocity = Vector3.zero;
